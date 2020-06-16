@@ -954,8 +954,8 @@ namespace
 
     void PrintLogo()
     {
-        wprintf(L"Microsoft (R) XACT-style Wave Bank Tool \n");
-        wprintf(L"Copyright (C) Microsoft Corp. All rights reserved.\n");
+        wprintf(L"Microsoft (R) XACT-style Wave Bank Tool - P4G Mod \n");
+        // TODO: wprintf(L"Copyright (C) Microsoft Corp. All rights reserved.\n");
 #ifdef _DEBUG
         wprintf(L"*** Debug build ***\n");
 #endif
@@ -980,6 +980,8 @@ namespace
         wprintf(L"   -f                  include entry friendly names\n");
         wprintf(L"   -nologo             suppress copyright message\n");
         wprintf(L"   -flist <filename>   use text file with a list of input files (one per line)\n");
+        // TODO: --looping / --build-sound-bank
+        // TODO: reject files if not ADPCM? - check P4G requires this
     }
 
     const char* GetFormatTagName(WORD wFormatTag)
@@ -1445,11 +1447,14 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
             entry->PlayRegion.dwOffset = uint32_t(waveOffset);
             entry->PlayRegion.dwLength = it->data.audioBytes;
 
-            if (it->data.loopLength > 0)
-            {
-                entry->LoopRegion.dwStartSample = it->data.loopStart;
-                entry->LoopRegion.dwTotalSamples = it->data.loopLength;
-            }
+            // ST: This is an awful hack to force looping
+            // TODO: Also needs to be non-compact (so looping flag/option implies non-compact)
+            // if (it->data.loopLength > 0)
+            // {
+            //     entry->LoopRegion.dwStartSample = it->data.loopStart;
+            //     entry->LoopRegion.dwTotalSamples = it->data.loopLength;
+            // }
+            entry->LoopRegion.dwTotalSamples = duration;
         }
 
         if (dwOptions & (1 << OPT_FRIENDLY_NAMES))
