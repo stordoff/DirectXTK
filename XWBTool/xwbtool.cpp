@@ -1179,7 +1179,6 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
 
             case OPT_P4GVOICE:
                 wprintf(L"WARNING: -p4g-voice is not implemented\n");
-                break;
             break;
             }
         }
@@ -1356,6 +1355,12 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         reason |= 0x4;
     }
 
+    if (dwOptions & (1 << OPT_P4GVOICE))
+    {
+        compact = false;
+        reason |= 0x8;
+    }
+
     if ((dwOptions & (1 << OPT_COMPACT)) && !compact)
     {
         wprintf(L"ERROR: Cannot create compact wave bank:\n");
@@ -1370,6 +1375,10 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
         if (reason & 0x4)
         {
             wprintf(L"- Audio wave data is too large to encode in compact wavebank (%llu > %llu).\n", waveOffset, (uint64_t(MAX_COMPACT_DATA_SEGMENT_SIZE) * uint64_t(dwAlignment)));
+        }
+        if (reason & 0x8)
+        {
+            wprintf(L"- P4G requires loop points.\n");
         }
         return 1;
     }
