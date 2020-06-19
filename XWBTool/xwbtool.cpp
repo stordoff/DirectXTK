@@ -784,6 +784,7 @@ enum OPTIONS
     OPT_FRIENDLY_NAMES,
     OPT_NOLOGO,
     OPT_FILELIST,
+    OPT_P4GVOICE,
     OPT_MAX
 };
 
@@ -852,6 +853,7 @@ const SValue g_pOptions[] =
     { L"f",         OPT_FRIENDLY_NAMES },
     { L"nologo",    OPT_NOLOGO },
     { L"flist",     OPT_FILELIST },
+    { L"p4g-voice", OPT_P4GVOICE },
     { nullptr,      0 }
 };
 
@@ -980,6 +982,10 @@ namespace
         wprintf(L"   -f                  include entry friendly names\n");
         wprintf(L"   -nologo             suppress copyright message\n");
         wprintf(L"   -flist <filename>   use text file with a list of input files (one per line)\n");
+        wprintf(L"   -p4g-voice          build a P4G-compatible voice bank (not implemented)\n");
+
+        // TODO: not implemented - p4g voice - check file number is 24991, force nc, force looping
+
         // TODO: --looping / --build-sound-bank
         // TODO: reject files if not ADPCM? - check P4G requires this
     }
@@ -1170,6 +1176,10 @@ int __cdecl wmain(_In_ int argc, _In_z_count_(argc) wchar_t* argv[])
                 }
                 inFile.close();
             }
+
+            case OPT_P4GVOICE:
+                wprintf(L"WARNING: -p4g-voice is not implemented\n");
+                break;
             break;
             }
         }
